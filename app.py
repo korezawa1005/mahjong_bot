@@ -4,6 +4,7 @@ from typing import Dict, List, Optional, Tuple
 
 import streamlit as st
 
+from ai_helper import describe_yaku
 from data.seed_sample import seed_yaku
 
 st.set_page_config(page_title="麻雀役サンプル", page_icon="🀄")
@@ -34,11 +35,16 @@ def find_yaku(query: str) -> Tuple[Optional[Dict], List[str]]:
 
 
 def render_yaku(yaku: Dict) -> None:
+    """役の詳細表示（AI 説明付き）。"""
     st.subheader(yaku["name"])
     st.write(f"読み: {yaku['reading']}")
-    st.write(f"翻数: 門前 {yaku['han']} / 鳴き {yaku['open_han'] or '-'}")
-    st.write("説明:")
-    st.write(yaku["description"])
+    st.write(f"翻数: 門前 {yaku['han']} / 鳴き {yaku['open_han'] if yaku['open_han'] is not None else '-'}")
+    st.write("AI解説:")
+    with st.spinner("AI の解説を生成中..."):
+        explanation, ok = describe_yaku(yaku)
+    st.write(explanation)
+    if not ok:
+        st.warning("ローカルAIに接続できなかったため、seed の説明文を表示しています。")
 
     photo = yaku.get("photo")
     if photo:
@@ -51,7 +57,8 @@ def render_yaku(yaku: Dict) -> None:
         st.info("この役には画像が設定されていません。")
 
 
-st.caption("テキスト入力で役を検索して表示します。")
+st.title("麻雀役サンプル表示")
+st.caption("テキスト入力で役を検索し、AI が解説した体で表示します。")
 
 query = st.text_input("役名や読みを入力（例: 立直 / リーチ）")
 
