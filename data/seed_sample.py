@@ -1,5 +1,3 @@
-"""Rails seeds.rb から写経した役データの簡易コピー."""
-
 seed_yaku = [
     {
         "name": "門前自摸",
