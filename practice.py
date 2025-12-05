@@ -51,3 +51,14 @@ def remove_evenindex(ln):
 
 print(remove_evenindex(['a', 'b', 'c', 'd', 'e', 'f', 'g']) == ['b', 'd', 'f'] )
 print(remove_evenindex([1, 2, 3, 4, 5]) == [2, 4])
+
+def change_domain(email, domain):
+    local, _ = email.split("@")
+    return local + "@" + domain
+    
+print(change_domain('spam@utokyo-ipp.org', 'ipp.u-tokyo.ac.jp') == 'spam@ipp.u-tokyo.ac.jp')
+
+def reverse_totuple(ln):
+    return tuple(ln[::-1])
+
+print(reverse_totuple([1, 2, 3, 4, 5]) == (5, 4, 3, 2, 1))
